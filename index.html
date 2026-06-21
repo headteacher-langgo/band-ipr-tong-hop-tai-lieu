@@ -183,6 +183,25 @@ mark{background:var(--vocab-hl);padding:0 2px;border-radius:3px}
 .spk-guide-note{margin-top:12px;font-size:12px;color:var(--muted);
   font-style:italic;line-height:1.5;background:#FFFBEB;border-left:3px solid #F5A623;
   border-radius:0 8px 8px 0;padding:9px 12px}
+/* Dropdown con cho GV / HV */
+.spk-acc{border:1px solid var(--line);border-radius:11px;overflow:hidden;margin-bottom:10px}
+.spk-acc:last-of-type{margin-bottom:0}
+.spk-acc-head{display:flex;align-items:center;gap:9px;cursor:pointer;user-select:none;
+  padding:12px 15px;background:var(--soft);font-weight:800;font-size:13.5px;color:var(--red-dark)}
+.spk-acc-head .ar2{margin-left:auto;font-size:12px;color:var(--muted);transition:transform .25s}
+.spk-acc.open .spk-acc-head .ar2{transform:rotate(180deg)}
+.spk-acc-body{display:none;padding:12px 16px 14px;border-top:1px solid var(--line)}
+.spk-acc.open .spk-acc-body{display:block}
+.spk-acc-body ol{margin:0;padding-left:18px;display:flex;flex-direction:column;gap:7px}
+.spk-acc-body li{font-size:13px;line-height:1.6;color:var(--ink)}
+.spk-acc-body li b{color:var(--red-dark)}
+.spk-tip{background:#FFF4F5;border-left:3px solid var(--red);border-radius:0 8px 8px 0;
+  padding:8px 11px;margin-top:9px;font-size:12.5px;line-height:1.55;color:var(--ink)}
+.spk-steps-intro{font-size:13px;font-weight:700;color:var(--red-dark);margin-bottom:10px}
+.spk-steps{margin:0;padding-left:20px;display:flex;flex-direction:column;gap:9px}
+.spk-steps li{font-size:13px;line-height:1.6;color:var(--ink)}
+.spk-steps li b{color:var(--red-dark)}
+.spk-steps li::marker{font-weight:800;color:var(--red)}
 .rc-break{background:#EDE9FE;color:#5B21B6;border-radius:10px;padding:10px 14px;
   font-size:13.5px;font-weight:600;margin-bottom:12px;text-align:center}
 /* materials theo buổi */
@@ -235,11 +254,11 @@ footer{text-align:center;padding:24px;color:var(--muted);font-size:13px}
 <nav class="tabs">
   <div class="tabs-inner">
     <button class="tab-btn active" data-tab="book">📚 Hướng dẫn sử dụng sách và audio</button>
-    <button class="tab-btn" data-tab="lessons">📺 Video tham khảo</button>
+    <button class="tab-btn" data-tab="grammar">📚 Grammar</button>
     <button class="tab-btn" data-tab="materials">📂 Tài liệu theo buổi</button>
     <button class="tab-btn" data-tab="recap">📝 Recap từng buổi</button>
-    <button class="tab-btn" data-tab="grammar">📚 Grammar</button>
     <button class="tab-btn" data-tab="spkreview">🎤 Review Speaking</button>
+    <button class="tab-btn" data-tab="lessons">📺 Video tham khảo</button>
   </div>
 </nav>
 <main>
@@ -316,28 +335,35 @@ footer{text-align:center;padding:24px;color:var(--muted);font-size:13px}
         <span class="ar">▾</span>
       </div>
       <div class="spk-guide-body">
-        <div class="spk-guide-grid">
-          <div class="spk-col">
-            <h4>🧑‍🏫 Giáo viên</h4>
-            <ol>
-              <li>Chọn <b>Bộ câu hỏi</b> theo buổi (ví dụ <i>Review · Lesson 11</i>) ở khung bên phải.</li>
-              <li>Mở <b>⚙ Quản lý</b> để nhập danh sách lớp &amp; học viên, rồi bấm <b>🎲 Quay random</b> để gọi HV trả lời.</li>
-              <li>Bấm <b>Câu tiếp theo</b> (Part 1/3) hoặc <b>Rút cue card</b> (Part 2) để hiện câu hỏi; máy sẽ tự đọc to.</li>
-              <li>Cần sửa nội dung? Bấm <b>✏️ Sửa câu hỏi</b> — chỉ lưu trên máy bạn, không ảnh hưởng người khác.</li>
-              <li>Khi chiếu màn hình, bật <b>👁 Trình chiếu cho HV</b> để ẩn các nút quản lý.</li>
-            </ol>
+        <div class="spk-acc" id="spkAccGV">
+          <div class="spk-acc-head" onclick="document.getElementById('spkAccGV').classList.toggle('open')">
+            <span>🧑‍🏫</span><span>Hướng dẫn cho Giáo viên</span><span class="ar2">▾</span>
           </div>
-          <div class="spk-col">
-            <h4>🎓 Học viên</h4>
+          <div class="spk-acc-body">
             <ol>
-              <li>Nghe câu hỏi, bấm <b>🔊 Nghe lại</b> nếu cần nghe thêm lần nữa.</li>
-              <li>Bấm <b>⏺ Ghi âm</b> để thu câu trả lời; nói xong bấm dừng để nghe lại &amp; xem script.</li>
-              <li>Với Part 2: dùng <b>timer 1 phút</b> chuẩn bị + ghi keywords, rồi <b>2 phút</b> để nói.</li>
-              <li>Luyện hết bộ câu rồi bấm <b>↺ Làm lại</b> để bắt đầu vòng mới.</li>
+              <li><b>Chọn bộ câu hỏi:</b> ở khung <b>"BỘ CÂU HỎI"</b> bên phải, bấm vào ô danh sách xổ xuống và chọn bộ theo buổi đang dạy (ví dụ <i>IPR · Review · Lesson 11</i>). Câu hỏi sẽ tự nạp theo bộ đã chọn.</li>
+              <li><b>Gọi học viên:</b> mở <b>⚙ Quản lý</b> để nhập danh sách lớp &amp; tên HV, rồi bấm <b>🎲 Quay random gọi HV</b> để chọn ngẫu nhiên người trả lời.</li>
+              <li><b>Hiện câu hỏi:</b> bấm <b>Câu tiếp theo</b> để lần lượt hiện từng câu; máy sẽ tự đọc to câu hỏi.</li>
+              <li><b>Bật chế độ trình chiếu cho HV:</b> bấm nút <b>"👁 Trình chiếu cho HV"</b> ở <b>góc trên bên phải</b> (badge sẽ đổi từ <i>TẮT</i> sang <i>ĐANG BẬT</i>). Khi bật, mọi nút quản lý/chỉnh sửa của GV sẽ ẩn đi, màn hình chỉ còn câu hỏi sạch sẽ để chiếu cho lớp xem. Bấm lại để <b>TẮT</b> và quay về chế độ điều khiển.</li>
+              <li><b>Sửa câu hỏi (tùy chọn):</b> bấm <b>✏️ Sửa câu hỏi</b> để chỉnh — thay đổi chỉ lưu trên máy bạn, không ảnh hưởng GV khác.</li>
             </ol>
           </div>
         </div>
-        <div class="spk-guide-note">💡 Mẹo: dùng được offline, không cần mạng. Ghi âm &amp; nhận diện giọng nói hoạt động tốt nhất trên Chrome hoặc Edge, nhớ cho phép quyền micro khi trình duyệt hỏi.</div>
+        <div class="spk-acc" id="spkAccHV">
+          <div class="spk-acc-head" onclick="document.getElementById('spkAccHV').classList.toggle('open')">
+            <span>🎓</span><span>Hướng dẫn cho Học viên</span><span class="ar2">▾</span>
+          </div>
+          <div class="spk-acc-body">
+            <div class="spk-steps-intro">Em làm theo 4 bước sau để tự luyện nói:</div>
+            <ol class="spk-steps">
+              <li><b>Chọn bộ câu hỏi (đúng Lesson):</b> ở khung <b>"BỘ CÂU HỎI"</b> bên phải, bấm vào ô danh sách xổ xuống và chọn bộ theo buổi em vừa học (ví dụ <i>IPR · Review · Lesson 11</i>). Câu hỏi sẽ tự nạp theo bộ đã chọn.</li>
+              <li><b>Bật chế độ trình chiếu:</b> bấm nút <b>"👁 Trình chiếu cho HV"</b> ở <b>góc trên bên phải</b> (badge đổi từ <i>TẮT</i> sang <i>ĐANG BẬT</i>). Khi bật, các nút cài đặt sẽ ẩn đi, màn hình chỉ còn phần luyện nói gọn gàng.</li>
+              <li><b>Nghe câu hỏi &amp; trả lời:</b> bấm <b>Câu tiếp theo</b> — máy sẽ tự đọc to câu hỏi (muốn nghe lại bấm <b>🔊 Nghe lại</b>). Trả lời tự nhiên <b>2–3 câu</b>. Có thể bấm <b>⏺ Ghi âm</b> để thu lại câu trả lời, nói xong bấm dừng để nghe lại và xem script.</li>
+              <li><b>Luyện hết bộ:</b> tiếp tục bấm <b>Câu tiếp theo</b> cho đến khi hết câu. Muốn luyện lại từ đầu, bấm <b>↺ Làm lại</b>.</li>
+            </ol>
+            <div class="spk-tip">🎤 Khi trình duyệt hỏi quyền dùng <b>micro</b>, hãy bấm <b>Cho phép / Allow</b> thì mới ghi âm được. 💡 Công cụ chạy được offline; ghi âm &amp; nhận diện giọng nói hoạt động tốt nhất trên <b>Chrome</b> hoặc <b>Edge</b>.</div>
+          </div>
+        </div>
       </div>
     </div>
     <iframe id="spkReviewFrame" title="IELTS Speaking Review" allow="microphone; autoplay" style="width:100%;min-height:80vh;border:1px solid var(--line);border-radius:14px;background:#fff" srcdoc=""></iframe>
