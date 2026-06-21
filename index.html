@@ -315,15 +315,14 @@ footer{text-align:center;padding:24px;color:var(--muted);font-size:13px}
   <!-- GRAMMAR -->
   <section class="tab-panel" id="panel-grammar">
     <div class="vocab-note">
-      <b>Grammar</b> — Tổng hợp tài liệu ngữ pháp của khóa học. Bấm vào thẻ bên dưới để mở folder tài liệu.
+      <b>Grammar theo buổi</b> — Slides &amp; video bài giảng ngữ pháp từng buổi. Bấm vào link để mở.
     </div>
-    <div class="book-links">
-      <a class="book-card" href="https://drive.google.com/drive/u/1/folders/15lWuzuzAVwVVe19CLwj7smwXpHi0ajU1" target="_blank" rel="noopener">
-        <span class="book-ico">📚</span>
-        <span class="book-meta"><b>Tài liệu Grammar (folder)</b><span>Mở folder tổng hợp ngữ pháp theo khóa học</span></span>
-        <span class="book-arrow">↗</span>
-      </a>
+    <div class="search-row">
+      <div class="search-box"><input id="searchGrammar" placeholder="Tìm theo buổi hoặc chủ đề ngữ pháp…"></div>
     </div>
+    <div class="count" id="countGrammar"></div>
+    <div id="grammarList"></div>
+    <div class="empty" id="emptyGrammar" style="display:none">Không tìm thấy buổi nào.</div>
   </section>
 
   <!-- SPEAKING REVIEW (nhúng) -->
@@ -444,6 +443,28 @@ function renderLessons(q){
 }
 
 /* ---- Tài liệu theo buổi ---- */
+const GRAMMAR_LESSONS = [{"lesson": 6, "topic": "Danh từ (Nouns)", "slides": "https://drive.google.com/file/d/1gbT94sdQ3jkCrM2JKjtmjLFSE5NJQM8A/view?usp=drive_link", "video": "https://drive.google.com/file/d/15tdGig-O1WsGxMp9qNvnLNgBwHn818uI/view?usp=drive_link"}, {"lesson": 7, "topic": "Lượng từ (Quantifiers)", "slides": "https://drive.google.com/file/d/1AzMJ8a1bZunVTUDpxkGFFKxN-LA0rh5v/view?usp=drive_link", "video": "https://drive.google.com/file/d/1zqwBBO7e8HjV0dac4Ffj2FfHT1rZtvxc/view?usp=drive_link"}, {"lesson": 8, "topic": "Đại từ (Pronouns)", "slides": "https://drive.google.com/file/d/1jTpoWUz3s7B5UQ_q-xUJQkrbk84li3Fh/view?usp=drive_link", "video": "https://drive.google.com/file/d/1V-20XiMLdK1in263ewX8DsJH1BjcBbti/view?usp=drive_link"}, {"lesson": 9, "topic": "Tính từ (Adjectives)", "slides": "https://drive.google.com/file/d/1BpPaIoiGV-OR9_p-_W6-PAPWbbPohZ-C/view?usp=drive_link", "video": "https://drive.google.com/file/d/10GkuRG5c8rF6ixlX5SxyaDFXO8Bk0MSK/view?usp=drive_link"}, {"lesson": 10, "topic": "Từ hạn định (Determiners)", "slides": "https://drive.google.com/file/d/1qs53nbGDwuADwBrWgWypPAidmJlnNYlK/view?usp=drive_link", "video": "https://drive.google.com/file/d/1Bbog3iSHzjtM3sxXotyWeT2_LJpKEBZ0/view?usp=drive_link"}, {"lesson": 11, "topic": "Giới từ (Prepositions)", "slides": "https://drive.google.com/file/d/1Y6bziN2lPayfFmKXi-u09y68OQnKQuON/view?usp=drive_link", "video": "https://drive.google.com/file/d/116AJaiAB1O46HBV8DNIh9wuD1X713VmS/view?usp=drive_link"}, {"lesson": 12, "topic": "Động từ & Thì 1 (Present Simple & Continuous)", "slides": "https://drive.google.com/file/d/13qOEZTdKSnOVJmgdcojdW9l__DRIITgg/view?usp=drive_link", "video": "https://drive.google.com/file/d/1asrx1XeQn12Ltc3iBDJDPQe3NkxOCS-o/view?usp=drive_link"}, {"lesson": 13, "topic": "Thì Quá khứ đơn (Past Simple)", "slides": "https://drive.google.com/file/d/1abZtCu0DXes1fRZxD2oounwNH60Kyko_/view?usp=drive_link", "video": "https://drive.google.com/file/d/1jCgQjp35ezWLe4smffMRojz8Xi5bUXVF/view?usp=drive_link"}, {"lesson": 14, "topic": "Thì Tương lai (Will & Be going to)", "slides": "https://drive.google.com/file/d/1-O9x6WQeKsvdDviZ-ckHr-IWAH_Is5eN/view?usp=drive_link", "video": "https://drive.google.com/file/d/1jNjmtipH0SCJ1mGyALOf44HjbQlQxWTl/view?usp=drive_link"}, {"lesson": 15, "topic": "Động từ khuyết thiếu (Modal verbs)", "slides": "https://drive.google.com/file/d/17mCKbrFg9-vihBsWuQqZf_VLT2zE1HG6/view?usp=drive_link", "video": "https://drive.google.com/file/d/1wRcvVQbrAl75spVCuLediKn_eSCNGiYC/view?usp=drive_link"}, {"lesson": 16, "topic": "Trạng từ (Adverbs)", "video": "https://drive.google.com/file/d/1OLTw9rb_Mot52cRA8g7mWEjBGkwWxwwx/view?usp=drive_link"}, {"lesson": 17, "topic": "Liên từ (Conjunctions)", "video": "https://drive.google.com/file/d/1mVRGLhU1-iPr1Gl-laBQdjM4iaLeYAPo/view?usp=drive_link"}, {"lesson": 18, "topic": "Cấu trúc câu & Câu ghép (Sentence)", "video": "https://drive.google.com/file/d/1UPGAphH7nLR4Bk_jHjEKRgXMxof4UmWs/view?usp=drive_link"}];
+
+function renderGrammar(q){
+  q=(q||'').trim().toLowerCase();
+  const list=document.getElementById('grammarList');
+  if(!list) return;
+  const data=GRAMMAR_LESSONS.filter(L=>{
+    if(!q) return true;
+    return ('buổi '+L.lesson+' '+L.topic).toLowerCase().includes(q);
+  });
+  const cnt=document.getElementById('countGrammar');
+  if(cnt) cnt.textContent=data.length+' buổi có tài liệu';
+  const emp=document.getElementById('emptyGrammar');
+  if(emp) emp.style.display=data.length?'none':'block';
+  list.innerHTML=data.map(L=>{
+    let links='';
+    if(L.slides) links+=`<a class="mt-link" href="${esc(L.slides)}" target="_blank" rel="noopener"><span class="mt-ico">📊</span><span class="mt-name">Slides bài giảng</span><span class="mt-arrow">↗</span></a>`;
+    if(L.video) links+=`<a class="mt-link" href="${esc(L.video)}" target="_blank" rel="noopener"><span class="mt-ico">🎬</span><span class="mt-name">Video bài giảng</span><span class="mt-arrow">↗</span></a>`;
+    return `<div class="mt-card"><div class="mt-head"><span class="lesson-badge">Buổi ${L.lesson}</span><span class="mt-topic">${esc(L.topic)}</span></div><div class="mt-res">${links}</div></div>`;
+  }).join('');
+}
+
 function renderMaterials(q){
   q=(q||'').trim().toLowerCase();
   const list=document.getElementById('materialsList');
@@ -543,9 +564,11 @@ function renderRecap(q){
 document.getElementById('searchLessons').addEventListener('input',e=>renderLessons(e.target.value));
 document.getElementById('searchMaterials').addEventListener('input',e=>renderMaterials(e.target.value));
 document.getElementById('searchRecap').addEventListener('input',e=>renderRecap(e.target.value));
+var _sg=document.getElementById('searchGrammar'); if(_sg) _sg.addEventListener('input',e=>renderGrammar(e.target.value));
 renderLessons('');
 renderMaterials('');
 renderRecap('');
+renderGrammar('');
 
 /* ---- Review Speaking: nạp iframe (lazy, 1 lần) ---- */
 (function(){
